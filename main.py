@@ -4,26 +4,25 @@ from scipy.optimize import minimize_scalar
 import scipy.optimize as optimize
 from scipy.optimize import LinearConstraint
 
-#SOLX = 15
-
 linear_constrain = LinearConstraint([1, 1], 0, 2)
 
+
 def func1(x):
-    return x ** 5 - x ** 2
+    return -x / np.exp(x)
 
 
 def diff_func1(x):
-    return 5 * (x ** 4) - 2 * x
+    return (x - 1) / np.exp(x)
 
 
 def func2(prm):
     x1, x2 = prm
-    return (x1 + 4) ** 2 + (x2 + 4) ** 2
+    return (x1 + 4) ** 2 + (x2 - 4) ** 2
 
 
 def b_func(prm) -> float:
     x1, x2 = prm
-    return -(2 / x1 - x2 - 2)
+    return -(1 / 2 * x1 - x2 - 2)
 
 
 def F(prms, r):
@@ -125,15 +124,14 @@ def two_sol():
     else:
         raise ValueError(result.message)
 
-
-X = np.arange(0, 1, 0.001)
+X = np.arange(0, 3, 0.001)
 e = 10e-3
 
 local_min_newton(X, e)
 
-global_min_scan(X, 0, 1, e)
+global_min_scan(X, 0, 3, e)
 
-res = minimize_scalar(func1, bounds=(0, 1), tol=e)
+res = minimize_scalar(func1, bounds=(0, 3), tol=e)
 print("xmin = ", res.x, "ymin = ", res.fun)
 
 min_barriers([1, 1], 1, 0.01, 10e-3)
